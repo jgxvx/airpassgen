@@ -9,6 +9,7 @@
         </excludedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="1" linkType="1" path="libs"/>
+      <libraryPathEntry kind="3" linkType="1" path="/Volumes/Web/actionscript/libs/as3corelib-.93/lib/as3corelib.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -19,4 +20,11 @@
   </applications>
   <modules/>
   <buildCSSFiles/>
+  <publishSource>
+    <sourcePathIncludes/>
+    <sourceExcludes>
+      <exclude path="libs"/>
+      <exclude path="src/AirPassGen-app.xml"/>
+    </sourceExcludes>
+  </publishSource>
 </actionScriptProperties>

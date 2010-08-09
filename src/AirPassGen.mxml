@@ -3,7 +3,7 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   width="500" height="600"
-					   creationComplete="init()">
+					   creationComplete="init()" viewSourceURL="srcview/index.html">
 	<s:layout>
 		<s:BasicLayout/>
 	</s:layout>
@@ -11,6 +11,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.adobe.utils.ArrayUtil;
 			import com.andhellfollowed.airpassgen.domain.Password;
 			
 			import mx.collections.ArrayCollection;
@@ -88,28 +89,40 @@
 				return count;
 			}
 			
-			protected function createPasswords(event:MouseEvent):void {
+			protected function onCreateButtonClick(event:MouseEvent):void {
+				var passwords:Array = new Array();
+				var count:Number = Number(this.passwordCountInput.text);
+				var difference:Number = count;
 				
-				this.passwords.removeAll();
 				this.enabled = false;
-				for(var i:uint=0;i<uint(this.passwordCountInput.text);i++) {
-					var passwordObj:Password = new Password(uint(
-						this.passwordLengthInput.text),
-						this.uppercaseLettersCheckBox.selected,
-						this.lowercaseLettersCheckBox.selected,
-						this.numbersCheckBox.selected,
-						this.symbolsCheckBox.selected
-					);
-					
-					var password:String = "";
-					
-					do {
-						password = passwordObj.createPassword();
-					} while(true == this.checkPasswordExists(password));
-					
-					this.passwords.addItem(password);
-				}
+				
+				var passwordObj:Password = new Password(uint(
+					this.passwordLengthInput.text),
+					this.uppercaseLettersCheckBox.selected,
+					this.lowercaseLettersCheckBox.selected,
+					this.numbersCheckBox.selected,
+					this.symbolsCheckBox.selected
+				);
+				
+				do {
+					passwords = passwords.concat(this.createPasswords(passwordObj,difference));
+					passwords = ArrayUtil.createUniqueCopy(passwords);
+					difference = count - passwords.length;
+				} while(difference > 0);
+				
+				this.passwords = new ArrayCollection(passwords);
+				
 				this.enabled = true;
+			}
+			
+			protected function createPasswords(passwordObj:Password,count:Number):Array {
+				var passwords:Array = new Array();
+				
+				for(var i:Number=0;i<count;i++) {
+					passwords.push(passwordObj.createPassword());
+				}
+				
+				return passwords;
 			}
 			
 			protected function checkPasswordExists(value:String):Boolean {
@@ -121,7 +134,7 @@
 				
 				return false;
 			}
-
+			
 			protected function onPasswordSelected(event:Event):void {
 				this.exportSelection();
 			}
@@ -162,7 +175,7 @@
 				
 				System.setClipboard(passwords);
 			}
-
+			
 		]]>
 	</fx:Script>
 	
@@ -179,7 +192,7 @@
 		<mx:NumberValidator id="passwordLengthValidator"
 							source="{passwordLengthInput}"
 							property="text"
-							minValue="6"
+							minValue="1"
 							domain="int"
 							trigger="{passwordLengthInput}"
 							triggerEvent="keyUp" />
@@ -213,7 +226,7 @@
 	</s:HGroup>
 	<s:Button id="createButton" 
 			  label="Create Passwords"
-			  click="createPasswords(event)"
+			  click="onCreateButtonClick(event)"
 			  enabled="{formValid}"
 			  left="10"
 			  right="10"
@@ -227,7 +240,7 @@
 				 itemClick="onPasswordSelected(event)"
 				 selectable="true"
 				 allowMultipleSelection="true"
-				 sortableColumns="false">
+				 sortableColumns="true">
 		<mx:columns>
 			<mx:DataGridColumn headerText="Passwords" />
 		</mx:columns>
