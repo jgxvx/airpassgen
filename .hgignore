@@ -1,0 +1,8 @@
+syntax: glob
+*.air
+.DS_Store
+._*
+.project
+.settings/*
+bin-debug/*.swf
+bin-debug/*.xml
