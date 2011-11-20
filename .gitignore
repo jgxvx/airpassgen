@@ -1,0 +1,8 @@
+*.air
+.DS_Store
+._*
+.project
+.settings/**
+bin-debug/**
+.actionScriptProperties
+.flexProperties
