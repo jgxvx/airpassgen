@@ -1,0 +1,15 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Juerg Gutknecht -- Everything -- @jgxvx
+
+# THANKS
+
+    Buffy Anne Summers
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    jQuery, Modernizr
